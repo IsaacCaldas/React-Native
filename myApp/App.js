@@ -2,29 +2,16 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 class App extends Component {
-  
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: ''
-    }
 
-    this.login = this.login.bind(this)
-
-  }
-
-  login(name) {
-    this.setState({
-      name
-    })
-  }
-  
   render() {
 
     return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 20, marginBottom: 20 }}>Hello <b>{this.state.name}</b>!</Text>
-        <Button title='Login' onPress={() => this.login('Isaac')} />
+        
+        <Text style={styles.firstText}>I am the first text.</Text>
+        <Text style={styles.secondText}>I am the second text.</Text>
+        <Text style={styles.thirdText}>I am the third text.</Text>
+
       </View>
     );
   }
@@ -38,5 +25,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  firstText: {
+    fontSize: 30,
+  },
+  secondText: {
+    color: 'blue',
+    margin: 30
+  },
+  thirdText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'brown'
   },
 });
