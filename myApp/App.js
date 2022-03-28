@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      name: ''
+      name: '',
+      input: ''
     }
 
-    this.getName = this.getName.bind(this)
+    this.login = this.login.bind(this)
   }
 
-  getName(name) {
-    name.length > 0 ? this.setState({name: 'Welcome ' + name}) : this.setState({name: ''})
+  login() {
+    if (this.state.input === '') {
+      alert('Say to me your name.')
+      return;
+    }
+    
+    this.setState({name: 'Welcome ' + this.state.input}) 
   }
  
   render() {
@@ -22,8 +28,11 @@ class App extends Component {
           style={styles.input}
           placeholder="What's your name?"
           underlineColorAndroid='transparent'
-          onChangeText={this.getName}
+          onChangeText={(name) => this.setState({input: name})}
         />
+
+        <Button title='Login' onPress={this.login} />
+
         <Text style={styles.text}>
           {this.state.name}
         </Text>
