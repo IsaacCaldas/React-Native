@@ -6,7 +6,7 @@ class App extends Component {
     super(props)
     this.state = {
       name: '',
-      input: ''
+      input: ''z
     }
 
     this.login = this.login.bind(this)
