@@ -52,7 +52,7 @@ export default function App() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => clearLap()}>
           <Text style={styles.buttonText}>{lap_clear}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
       </View>
 
       <View style={styles.lastTimeArea}>
