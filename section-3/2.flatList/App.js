@@ -1,22 +1,19 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { StyleSheet, Text, View, Switch } from 'react-native';
 
 export default function App() {
 
-  const [value, setValue] = useState(30);
+  const [value, setValue] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Slider
-        minimumValue={0}
-        maximumValue={100}
-        onValueChange={(value) => setValue(value)}
+      <Switch
         value={value}
-        minimumTrackTintColor="#81D532"
-        maximumTrackTintColor="#223ED5"
+        onValueChange={(value) => setValue(value)}
+        thumbColor='#f0ad4e'
+        trackColor={{ false: '#ccc', true: '#f0ad4e' }}
       />
-      <Text style={{textAlign: 'center', fontSize: 25, marginBottom: 100}}>{value.toFixed(0)}</Text>
+      <Text>{value ? 'On' : 'Off'}</Text>
     </View>
   );
 }
