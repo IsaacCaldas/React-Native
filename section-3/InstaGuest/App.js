@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import feed_data from './src/json/feed_data';
-import FeedList from './src/components/FeedList';
+import FeedList from './src/components/Post';
 
 export default function App() {
   return (
@@ -21,6 +21,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <FlatList
+        keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         data={feed_data}
         renderItem={({ item }) => <FeedList data={item} />}
