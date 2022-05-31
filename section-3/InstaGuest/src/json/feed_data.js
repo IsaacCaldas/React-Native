@@ -11,7 +11,8 @@ const feed_data = [
     ],
     "liked": true, 
     "comments": "27k",
-    "verified": true
+    "verified": true,
+    "date": "3 seconds"
   },
   { 
     "id": 2, 
@@ -21,8 +22,9 @@ const feed_data = [
     "description": "E eu sou assim, vivo do meu jeito, do meu modo.",
     "tags": [],
     "liked": true,  
-    "comments": "340",
-    "verified": true
+    "comments": "483",
+    "verified": true,
+    "date": "5 minutes"
   },
   { 
     "id": 3, 
@@ -36,7 +38,8 @@ const feed_data = [
     ],
     "liked": false,
     "comments": "56",
-    "verified": false
+    "verified": false,
+    "date": "1 hour ago"
   },
   { 
     "id": 4, 
@@ -47,7 +50,8 @@ const feed_data = [
     "tags": [],
     "liked": false,   
     "comments": "243",
-    "verified": false
+    "verified": false,
+    "date": "5 hours ago"
   },
   { 
     "id": 5, 
@@ -61,8 +65,9 @@ const feed_data = [
       {"id": 2, "name": "#PSG"}
     ],
     "liked": false,  
-    "comments": "340",
-    "verified": true
+    "comments": "540",
+    "verified": true,
+    "date": "1 day ago"
   }
 ]
 

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native';
 import feed_data from './src/json/feed_data';
 import FeedList from './src/components/Post';
@@ -47,9 +46,11 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   logo: {
+    width: 170,
+    height: 45
   },
   send: {
-    width: 23,
-    height: 23
+    width: 30,
+    height: 30
   },
 });
