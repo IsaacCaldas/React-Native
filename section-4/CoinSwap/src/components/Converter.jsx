@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 import api from '../services/api';
 
 export default function Converter({firstCurrency, secondCurrency}) {
@@ -8,7 +8,10 @@ export default function Converter({firstCurrency, secondCurrency}) {
   const [convertedValue, setConvertedValue] = useState()
 
   async function convert() {
-    const response = await api.get(`/convert?q=USD_BRL&compact=ultra&apiKey=7c5ef455b88d735bc6ad`);
+    const response = await api.get(`/convert?q=${firstCurrency}_${secondCurrency}&compact=ultra&apiKey=7c5ef455b88d735bc6ad`);
+    let price = response.data[`${firstCurrency}_${secondCurrency}`];
+    setConvertedValue(price * parseFloat(value));
+    Keyboard.dismiss();
   }
 
   return (
@@ -22,7 +25,7 @@ export default function Converter({firstCurrency, secondCurrency}) {
         keyboardType="numeric"
       />
 
-      { convertedValue && <Text style={styles.convertedValue}>{convertedValue}</Text> }
+      { convertedValue && <Text style={styles.convertedValue}>{convertedValue.toFixed(2)}{secondCurrency}</Text> }
 
       <TouchableOpacity style={styles.button} onPress={() => convert()}>
         <Text style={styles.buttonText}>CONVERT</Text>
@@ -64,8 +67,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     alignItems: 'center',
-    justifyContent: 'center',
-    top: 220
+    justifyContent: 'center'
   },
   buttonText: {
     color: '#fff',
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
   convertedValue: {
     fontSize: 23,
     fontWeight: 'bold',
-    color: '#111'
+    color: '#111',
+    marginBottom: 20
   }
 })
