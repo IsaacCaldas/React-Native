@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard } from 'react-native';
-import { AsyncStorage } from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 
@@ -16,15 +16,23 @@ export default function App() {
   }
 
   useEffect(() => {
-    name !== prev_name && setInAsyncStorage()
-    getInAsyncStorage()
+    if (name) {
+      name !== prev_name && setInAsyncStorage()
+      getInAsyncStorage()
+    }
   }, [name])
 
-  const setInAsyncStorage = async () => await AsyncStorage.setItem('name', name.name);
+  useEffect(() => {
+    getInAsyncStorage()
+  }, [])
+
+  const setInAsyncStorage = async () => await AsyncStorage.setItem('name', name);
   const getInAsyncStorage = async () => {
     const resp = await AsyncStorage.getItem('name')
-    setPrevName(name)
-    setName(resp)
+    if (resp !== undefined) {
+      setPrevName(name)
+      setName(resp)
+    }
   }
 
   return (
