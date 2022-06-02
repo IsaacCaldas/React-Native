@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, Animated, Easing, TouchableOpacity } from 'react-native';
 
 export default function App() {
+
+  const [booleanTruth, setBool] = useState(false);
 
   // const anmWidth = useRef(new Animated.Value(150)).current
   // const anmHeight = useRef(new Animated.Value(50)).current
@@ -49,8 +51,12 @@ export default function App() {
   // }, [])
 
   useEffect(() => {
-    Spinner()
-  }, [])
+
+    if(booleanTruth) {
+      Spinner()
+      Resize()
+    }
+  }, [booleanTruth])
 
   function Spinner(){
     Animated.loop(
@@ -60,13 +66,10 @@ export default function App() {
         easing: Easing.linear,
         useNativeDriver: true
       })
-    ).start(() => {
-      spin.setValue(0)
-      Spinner()
-    })
+    ).start()
   }
 
-  useEffect(() => {
+  function Resize() {
     Animated.loop(
       Animated.sequence([
         Animated.parallel([
@@ -95,10 +98,20 @@ export default function App() {
         ])
       ])
     ).start()
-  }, [])
+  }
 
   return (
     <View style={styles.container}>
+
+      <View style={{marginBottom: 50}}>
+        <TouchableOpacity
+          onPress={() => setBool(!booleanTruth)}
+          style={{width: 100, height: 100, backgroundColor: '#f00', justifyContent: 'center', alignItems: 'center', borderRadius: 50, fontWeight: 'bold'}}
+        >
+          <Text style={{color: '#fff', fontSize: 18}}>Animate!</Text>
+        </TouchableOpacity>
+      </View>
+
       <Animated.View style={{width: 100, height: 100, backgroundColor: "#eee", transform: [{rotate: spinValue}], borderRadius: 50, borderColor: "#aa2b32", borderWidth: 5, borderStyle: 'dashed'}}>
       </Animated.View>
 
