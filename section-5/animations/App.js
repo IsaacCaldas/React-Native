@@ -3,73 +3,112 @@ import { StyleSheet, Text, View, Animated, Easing } from 'react-native';
 
 export default function App() {
 
-  const anmWidth = useRef(new Animated.Value(150)).current
-  const anmHeight = useRef(new Animated.Value(50)).current
+  // const anmWidth = useRef(new Animated.Value(150)).current
+  // const anmHeight = useRef(new Animated.Value(50)).current
+  const anmScale = useRef(new Animated.Value(1)).current
   const anmText = useRef(new Animated.Value(18)).current
-  const anmOpacity = useRef(new Animated.Value(0)).current
+  const anmOpacity = useRef(new Animated.Value(1)).current
 
-  const spinValue = useRef(new Animated.Value(0)).current
-  const spin = spinValue.interpolate({
+  const spin = useRef(new Animated.Value(0)).current
+  const spinValue = spin.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '1800deg']
+    outputRange: ['0deg', '36000deg']
   })
-  
-  // useEffect(() => {  ---- SEQUENCE
+
+  // useEffect(() => { 
   //   Animated.sequence([
-  //     Animated.timing(anmWidth, {
-  //       toValue: 250,
+  //     Animated.timing(anmOpacity, {
+  //       toValue: 1,
   //       duration: 1000
   //     }),
-  //     Animated.timing(anmHeight, {
-  //       toValue: 100,
-  //       duration: 1000
+  //     Animated.parallel([
+  //       Animated.timing(anmWidth, {
+  //         toValue: 250,
+  //         duration: 2000
+  //       }),
+  //       Animated.timing(anmHeight, {
+  //         toValue: 100,
+  //         duration: 2000
+  //       }),
+  //       Animated.timing(spinValue, {
+  //         toValue: 1,
+  //         duration: 2000,
+  //         easing: Easing.linear,
+  //         useNativeDriver: true
+  //       }),
+  //       Animated.timing(anmText, {
+  //         toValue: 22,
+  //         duration: 2000
+  //       })
+  //     ]),
+  //     Animated.timing(anmOpacity, {
+  //       toValue: 0,
+  //       duration: 2000
   //     })
   //   ]).start()
   // }, [])
 
-  useEffect(() => { 
-    Animated.sequence([
-      Animated.timing(anmOpacity, {
-        toValue: 1,
-        duration: 1000
-      }),
-      Animated.parallel([
-        Animated.timing(anmWidth, {
-          toValue: 250,
-          duration: 2000
-        }),
-        Animated.timing(anmHeight, {
-          toValue: 100,
-          duration: 2000
-        }),
-        Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 2000,
-          easing: Easing.linear,
-          useNativeDriver: true
-        }),
-        Animated.timing(anmText, {
-          toValue: 22,
-          duration: 2000
-        })
-      ]),
-      Animated.timing(anmOpacity, {
-        toValue: 0,
-        duration: 2000
-      })
-    ]).start()
+  useEffect(() => {
+    Spinner()
   }, [])
 
+  function Spinner(){
+    Animated.loop(
+      Animated.timing(spin, {
+        toValue: 1,
+        duration: 360000,
+        easing: Easing.linear,
+        useNativeDriver: true
+      })
+    ).start(() => {
+      spin.setValue(0)
+      Spinner()
+    })
+  }
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(anmScale, {
+            toValue: 1.3,
+            duration: 1000,
+            easing: Easing.linear,
+            useNativeDriver: true
+          }),
+          Animated.timing(anmText, {
+            toValue: 22,
+            duration: 750
+          })
+        ]),
+        Animated.parallel([
+          Animated.timing(anmScale, {
+            toValue: 1,
+            duration: 1000,
+            easing: Easing.linear,
+            useNativeDriver: true
+          }),
+          Animated.timing(anmText, {
+            toValue: 18,
+            duration: 750
+          })
+        ])
+      ])
+    ).start()
+  }, [])
 
   return (
     <View style={styles.container}>
+      <Animated.View style={{width: 100, height: 100, backgroundColor: "#eee", transform: [{rotate: spinValue}], borderRadius: 50, borderColor: "#aa2b32", borderWidth: 5, borderStyle: 'dashed'}}>
+      </Animated.View>
 
-      <Animated.View style={{width: anmWidth, height: anmHeight, backgroundColor: "#a3b8a2", justifyContent: "center", transform: [{rotate: spin}], borderRadius: 75, opacity: anmOpacity}}>
+      <Animated.View style={{backgroundColor: "#a3b8a2", justifyContent: "center", transform: [{scale: anmScale}], width: 150, height: 50, marginTop: 20}}>
+      
+       {/* borderRadius: 75, opacity: anmOpacity}}> */}
         <Animated.Text style={{color: "#fff", fontSize: anmText, textAlign: 'center'}}>
           Loading...
         </Animated.Text>
       </Animated.View>
-
     </View>
   );
 }
