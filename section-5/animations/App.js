@@ -6,7 +6,7 @@ export default function App() {
   const anmWidth = useRef(new Animated.Value(150)).current
   const anmHeight = useRef(new Animated.Value(50)).current
   const anmText = useRef(new Animated.Value(18)).current
-  const anmOpacity = useRef(new Animated.Value(1)).current
+  const anmOpacity = useRef(new Animated.Value(0)).current
 
   const spinValue = useRef(new Animated.Value(0)).current
   const spin = spinValue.interpolate({
@@ -29,6 +29,10 @@ export default function App() {
 
   useEffect(() => { 
     Animated.sequence([
+      Animated.timing(anmOpacity, {
+        toValue: 1,
+        duration: 1000
+      }),
       Animated.parallel([
         Animated.timing(anmWidth, {
           toValue: 250,
