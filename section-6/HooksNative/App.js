@@ -6,6 +6,8 @@ export default function App() {
 
   const [inputText, setInputText] = useState('')
   const [name, setName] = useState('')
+  const [boolValue, setBool] = useState(true)
+  const inputName = useRef(null)
 
   useEffect(() => getItem(), []);
   const getItem = async () => {
@@ -15,7 +17,10 @@ export default function App() {
   useEffect(() => setToStorage(), [name]);
   const setToStorage = async () => await AsyncStorage.setItem('name', name)
 
-  const save = () => setName(inputText)
+  const save = () => {
+    setBool(false)
+    setName(inputText)
+  }
 
   // let name_lenght = name.length - Much renders
   // console.log('name_lenght', name_lenght)
@@ -25,19 +30,34 @@ export default function App() {
     return name.length
   }, [name])
 
+  function newName() {
+    setBool(true)
+    inputName.current.focus()
+  }
+
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.subTitle}>Have {name_lenght} letters</Text>
       </View>
-      <View>
-        <TextInput style={styles.input} placeholder="Enter your name" onChangeText={(text) => setInputText(text)} />
-        <TouchableOpacity style={styles.button} onPress={() => save()}>
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
+        <View>
+          <TextInput style={styles.input} 
+            placeholder="Enter your name" 
+            onChangeText={(text) => setInputText(text)} 
+            ref={inputName} 
+          />
+            
+          {boolValue ?
+            <TouchableOpacity style={styles.button} onPress={() => save()}>
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+            : 
+            <TouchableOpacity style={styles.button} onPress={() => newName()}>
+              <Text style={styles.buttonText}>New Name</Text>
+            </TouchableOpacity>
+          }
       </View>
-      
     </View>
   );
 }
@@ -50,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   title: {
-    fontSize: 40,
+    fontSize: 35,
     textAlign: 'center',
     margin: 5,
     color: '#32e4a3'
@@ -58,7 +78,8 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 25,
     textAlign: 'center',
-    color: '#32a4a3'
+    color: '#32a4a3',
+    marginBottom: 40
   },
   input: {
     height: 40,
