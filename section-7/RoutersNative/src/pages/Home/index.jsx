@@ -5,12 +5,19 @@ export default function Home() {
 
   const navigation = useNavigation()
 
+  function toAbout() {
+    navigation.navigate('About', { 
+      name: 'Isaac Caldas',
+      email: 'isaac@dev.com'
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home Page</Text>
       <Button 
         title="Go to About"
-        onPress={() => navigation.navigate('About')}
+        onPress={() => toAbout()}
       />
     </View>
   )

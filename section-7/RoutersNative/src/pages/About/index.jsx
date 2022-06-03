@@ -1,16 +1,24 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-export default function About() {
+
+export default function About({ route }) {
 
   const navigation = useNavigation()
 
+  function toHome() {
+    navigation.navigate('Home')
+  }
+
+
   return (
     <View style={styles.container}>
+      <Text>{route.params?.name}</Text>
+      <Text>{route.params?.email}</Text>
       <Text style={styles.text}>About Page</Text>
       <Button 
-        title="Go to About"
-        onPress={() => navigation.navigate('Home')}
+        title="Go to Home"
+        onPress={() => toHome()}
       />
     </View>
   )
