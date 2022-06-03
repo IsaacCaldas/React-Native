@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard } from 'react-native';
 
 import api from '../services/api';
 
@@ -16,6 +16,7 @@ export default function CepFinder({cepData, setLoading}) {
     }
 
     if (cep.length !== 8) {
+      Keyboard.dismiss()
       alert('Invalid CEP')
       return
     }
@@ -23,14 +24,17 @@ export default function CepFinder({cepData, setLoading}) {
     await api.get(`/${cep}/json`).then(response => {
       if (response.data.erro) {
         cepData("")
+        Keyboard.dismiss()
         setLoading(false)
         alert('CEP not found')
         return
       }
       cepData(response.data)
+      Keyboard.dismiss()
       setLoading(false)
     }).catch(error => {
       cepData("")
+      Keyboard.dismiss()
       setLoading(false)
       alert('Internal server error')
     })
