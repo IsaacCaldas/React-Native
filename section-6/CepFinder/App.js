@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import CepFinder from './src/Components/CepFinder';
 import CepFound from './src/Components/CepFound';
@@ -33,7 +33,7 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <CepFinder cepData={setCepFound} setLoading={setLoading}/>
         { loading ? load() : <CepFound cep={cep} cepFoundData={cepFoundData}/> }
@@ -48,7 +48,7 @@ export default function App() {
           </Text>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

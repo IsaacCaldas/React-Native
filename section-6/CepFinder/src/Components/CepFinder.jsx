@@ -9,6 +9,12 @@ export default function CepFinder({cepData, setLoading}) {
   const inputCep = useRef(null)
 
   async function handleSearchCep() {
+
+    if(!cep) {
+      inputCep.current.focus()
+      return
+    }
+
     if (cep.length !== 8) {
       alert('Invalid CEP')
       return
