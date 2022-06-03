@@ -5,13 +5,6 @@ export default function Home() {
 
   const navigation = useNavigation()
 
-  function toAbout() {
-    navigation.navigate('About', { 
-      name: 'Isaac Tavares Caldas Gonçalves',
-      email: 'isaac@dev.com'
-    })
-  }
-
   function toContacts() {
     navigation.navigate('Contacts')
   }
