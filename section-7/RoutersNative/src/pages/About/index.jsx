@@ -1,6 +1,6 @@
+import { useLayoutEffect } from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 export default function About() {
 
@@ -11,6 +11,11 @@ export default function About() {
     navigation.navigate('Home')
   }
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: route.params?.name === '' ? 'About' : route.params?.name,
+    })
+  }, [navigation])
 
   return (
     <View style={styles.container}>
