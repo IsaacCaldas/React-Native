@@ -7,7 +7,7 @@ export default function Home() {
 
   function toAbout() {
     navigation.navigate('About', { 
-      name: 'Isaac Caldas',
+      name: 'Isaac Tavares Caldas Gonçalves',
       email: 'isaac@dev.com'
     })
   }

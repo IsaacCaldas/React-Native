@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 
-
-export default function About({ route }) {
+export default function About() {
 
   const navigation = useNavigation()
+  const route = useRoute()
 
   function toHome() {
     navigation.navigate('Home')
