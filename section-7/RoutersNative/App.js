@@ -1,55 +1,64 @@
 import { useState, useEffect } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 import Home from './src/pages/Home'
 import About from './src/pages/About'
 import Contacts from './src/pages/Contacts'
 
-const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
 export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} 
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarHideOnKeyboard: true,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: '#bf33a3',
+          tabBarInactiveTintColor: '#ccc',
+          tabBarStyle: {
+            backgroundColor: '#333',
+            shadowOffset: { width: 0, height: 0 },
+            borderTopWidth: 0,
+            shadowColor: '#000',
+            shadowOpacity: 0.2,
+            elevation: 5,
+          }
+        }}
+      >
+        <Tab.Screen name="Home" component={Home}
           options={{
-            title: 'Home',
-            headerStyle: {
-              backgroundColor: '#3abaaa',
-              height: 50
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-              fontSize: 18
-            },
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="home" color={color} size={size} />
+            )
           }}
         />
-
-        <Stack.Screen name="About" component={About} 
+        <Tab.Screen name="About" component={About}
           options={{
-            title: 'About me',
-            headerStyle: {
-              backgroundColor: '#3abaaa',
-              height: 50
-            }
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Feather name="info" color={color} size={size} />
+            )
+          }} 
+        />
+        <Tab.Screen name="Contacts" component={Contacts}
+          options={{
+            tabBarLabel: 'Contatos',
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="contacts" color={"red"} size={size} />
+            )
           }}
         />
-
-        <Stack.Screen name="Contacts" component={Contacts} 
-          options={{
-            title: 'Contacts',
-            headerStyle: {
-              backgroundColor: '#3abaaa',
-              height: 50
-            },
-            headerTintColor: '#fff'
-          }}
-        />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   )
 }

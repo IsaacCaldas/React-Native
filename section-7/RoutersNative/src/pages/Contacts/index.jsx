@@ -1,10 +1,7 @@
 import { useLayoutEffect } from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
-import { useNavigation, useRoute, StackActions } from '@react-navigation/native'
 
 export default function Contacts() {
-
-  const navigation = useNavigation()
 
   return (
     <View style={styles.container}>
