@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import stackRoutes from './stackRoutes'
 import About from '../pages/About'
 import Contacts from '../pages/Contacts'
+import CustomDrawer from '../components/CustomDrawer'
 
 const Tab = createBottomTabNavigator()
 
@@ -16,13 +17,24 @@ export default function Routes() {
 
   return (
     <Drawer.Navigator
+      drawerContent={<CustomDrawer/>}
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        drawerStyle: {
+          backgroundColor: '#e2a34f'
+        },
+        drawerActiveBackgroundColor: '#a3d3b3',
+        drawerActiveTintColor: '#fff',
+        drawerInactiveBackgroundColor: '#ccc',
+        drawerInactiveTintColor: '#111'
       }}
     >
       <Drawer.Screen 
         name="HomeStack"
         component={stackRoutes}
+        options={{
+          title: 'Test'
+        }}
       />
       <Drawer.Screen
         name="About"
