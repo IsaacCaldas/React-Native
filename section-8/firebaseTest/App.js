@@ -14,18 +14,33 @@ export default function App() {
   }, []);
 
   async function fetchDataIntoFirebase(){
-    // Many times get a snapshot
-    // await firebase.database().ref('name').on('value', (snapshot) => {
-    //   setName(snapshot.val());
-    //   setLoad(true);
+   
+    // create a node
+    // await firebase.database().ref('type').set('admin')
+
+    // remove a node
+    // await firebase.database().ref('type').remove()
+
+    // add a child into a node
+    // await firebase.database().ref('Users').child(3).set({
+    //   name: 'John Doe',
+    //   age: '25'
     // })
 
-    // get a snapshot one time
-    await firebase.database().ref('Users/1').once('value', (snapshot) => {
-      setName(snapshot.val().name);
-      setAge(snapshot.val().age);
-      setLoad(true);
-    })
+    // remove a child 
+    // await firebase.database().ref('Users').child(3).remove()
+
+    // update a data into child
+    // await firebase.database().ref('Users').child(3).update({
+    //   name: 'Junin'
+    // })
+      
+    // set a data into child
+    // await firebase.database().ref('Users').child(2).child('name').set('Isabelle')
+
+    // remove a data into child
+    // await firebase.database().ref('Users').child(2).child('name').remove()
+
   }
 
   return (
