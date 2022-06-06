@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 import firebase from './src/services/firebase_connection';
 
@@ -10,10 +10,27 @@ export default function App() {
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    fetchDataIntoFirebase();
+    // fetchDataIntoFirebase();
   }, []);
 
-  async function fetchDataIntoFirebase(){
+  async function saveData(){
+
+    if (name === '' || age === '') {
+      alert('Please fill the form');
+      return;
+    } 
+
+    let users = await firebase.database().ref('Users');
+    let key = users.push().key;
+
+    users.child(key).set({
+      name,
+      age
+    })
+
+    setName('');
+    setAge('');
+    alert('Data saved successfully');
    
     // create a node
     // await firebase.database().ref('type').set('admin')
@@ -45,14 +62,29 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      { load ? 
-        <>
-          <Text style={styles.welcomeText}>Hello {name}!</Text>
-          <Text style={styles.welcomeText}>Your age is {age}!</Text>
-        </>
-        : <Text style={styles.welcomeText}>Loading...</Text> 
-      }
+      <View style={styles.form}>
+        <View style={styles.form_item}>
+          <Text style={styles.title}>Login</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your name"
+            onChangeText={(text) => setName(text)}
+            value={name}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your age"
+            onChangeText={(text) => setAge(text)}
+            value={age}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => saveData()}
+        >
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -60,7 +92,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#444',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -69,5 +101,51 @@ const styles = StyleSheet.create({
     color: '#a23d4b',
     textAlign: 'center',
     marginTop: 10,
+  },
+  form: {
+    width: "80%",
+    height: 350,
+    backgroundColor: '#222',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 20,
+    justifyContent: 'space-between'
+  },
+  form_item: {
+    width: "100%",
+    textAlign: 'center'
+  },
+  title: {
+    fontSize: 40,
+    color: '#eee',
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20
+  },
+  input: {
+    width: "100%",
+    height: 40,
+    borderColor: '#a23d4b',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 10,
+    color: '#fff',
+    backgroundColor: '#333'
+  },
+  button: {
+    backgroundColor: '#a23d4b',
+    width: "100%",
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 5,
+    borderRadius: 5,
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
   }
 });
