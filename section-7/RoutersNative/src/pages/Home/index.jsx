@@ -13,6 +13,7 @@ export default function Home() {
     <View style={styles.container}>
       <Text style={styles.text}>Home Page</Text>
       <Button title="Go to Details" onPress={goToDetails} />
+      <Button title="Open drawer" onPress={() => navigation.openDrawer()} />
     </View>
   )
 }

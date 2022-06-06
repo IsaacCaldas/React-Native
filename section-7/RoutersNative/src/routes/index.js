@@ -15,7 +15,11 @@ export default function Routes() {
   const Drawer = createDrawerNavigator()
 
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
       <Drawer.Screen 
         name="HomeStack"
         component={stackRoutes}
