@@ -1,21 +1,31 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native'
+import 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 import SignInUp from './src/pages/SignInUp';
+import Home from './src/pages/Home';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 
   return (
-    <View style={styles.container}>
-      <SignInUp />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen
+          name='SignInUp'
+          component={SignInUp}
+        />
+        <Stack.Screen
+          name='Home'
+          component={Home}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#444',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20
-  }
-})

@@ -1,63 +1,67 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 
-import firebase from '../services/firebase_connection';
-
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import firebase from '../services/firebase_connection'
+import { useNavigation } from '@react-navigation/native'
 
 export default function SignInUp() {
 
-  const [user, setUser] = useState(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [password_not_match, setPasswordNotMatch] = useState(false);
+  const navigation = useNavigation()
 
-  const [isNewUser, setIsNewUser] = useState(false); 
+  const [isNewUser, setIsNewUser] = useState(false)
+  const [load, setLoad] = useState(false)
 
-  const [load, setLoad] = useState(false);
+  const [user, setUser] = useState()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [password_confirmation, setPasswordConfirmation] = useState('')
+  const [password_not_match, setPasswordNotMatch] = useState(false)
 
   useEffect(() => {
-    password !== password_confirmation ? setPasswordNotMatch(true) : setPasswordNotMatch(false);
-  }, [password_confirmation]);
+    password !== password_confirmation ? setPasswordNotMatch(true) : setPasswordNotMatch(false)
+  }, [password_confirmation])
+
+  useEffect(() => {
+    user && navigation.navigate('Home', { user })
+  }, [user])
 
   async function signUp(){
-    setLoad(true);
+    setLoad(true)
 
     if (email.length === 0 || password.length === 0) {
-      alert('Please fill in all fields');
-      setLoad(false);
-      return;
+      alert('Please fill in all fields')
+      setLoad(false)
+      return
     }
     if (password_not_match) {
-      alert('Password not match');
-      setLoad(false);
-      return;
+      alert('Password not match')
+      setLoad(false)
+      return
     }
 
     await firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((value) => {
-        alert(`${value.user.email} is successfully registered`);
-        setEmail('');
-        setPassword('');
-        setIsNewUser(false);
-        setLoad(false);
+        alert(`${value.user.email} is successfully registered`)
+        setEmail('')
+        setPassword('')
+        setIsNewUser(false)
+        setLoad(false)
       }).catch((error) => {
         
         if (error.code === 'auth/email-already-in-use') {
-          alert('Email already in use');
-          setEmail('');
-          setLoad(false);
+          alert('Email already in use')
+          setEmail('')
+          setLoad(false)
           return
         }
         else if (error.code === 'auth/invalid-email') {
-          invalidEmail();
+          invalidEmail()
           return
         }
         else if (error.code === 'auth/weak-password') {
           alert('Password is weak, needs to be at least 6 characters');
-          setPassword('');
-          setLoad(false);
+          setPassword('')
+          setLoad(false)
           return
         }
         else {
@@ -68,12 +72,12 @@ export default function SignInUp() {
 
   async function signIn(){
 
-    setLoad(true);
+    setLoad(true)
 
     if (email.length === 0 || password.length === 0) {
-      alert('Please fill in all fields');
-      setLoad(false);
-      return;
+      alert('Please fill in all fields')
+      setLoad(false)
+      return
     }
 
     await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -81,9 +85,9 @@ export default function SignInUp() {
         alert(`Welcome ${value.user.email}!`)
         setEmail('')
         setPassword('')
-        setUser(value.user.email)
         setIsNewUser(false)
         setLoad(false)
+        setUser(value.user.email)
       }
       ).catch((error) => {
         if (error.code === 'auth/invalid-email') {
@@ -91,59 +95,36 @@ export default function SignInUp() {
           return
         }
         else if (error.code === 'auth/user-not-found') {
-          alert('User not found');
-          setEmail('');
-          setLoad(false);
+          alert('User not found')
+          setEmail('')
+          setLoad(false)
           return
         }
         else if (error.code === 'auth/wrong-password') {
-          alert('Wrong password');
-          setPassword('');
-          setLoad(false);
+          alert('Wrong password')
+          setPassword('')
+          setLoad(false)
           return
         }
         else {
-          serverError();
+          serverError()
         }
       })
   }
 
   function invalidEmail() {
-    alert('Invalid email');
-    setEmail('');
-    setLoad(false);
+    alert('Invalid email')
+    setEmail('')
+    setLoad(false)
   }
 
   function serverError(){
-    alert('Internal server error');
-    setLoad(false);
-  }
-
-  async function signOut() {
-    await firebase.auth().signOut()
-      .then(() => {
-        setUser(null)
-        alert('User signed out')
-      }).catch((error) => {
-        serverError()
-      });
+    alert('Internal server error')
+    setLoad(false)
   }
 
   return (
-    <>
-      { user && 
-        <View style={styles.userArea}>
-          <Text style={styles.userAreaText}>
-            {user} <View style={styles.userStatus} />
-          </Text>
-          <AntDesign
-            name="logout"
-            size={18}
-            color="#eee"
-            onPress={() => signOut()}
-          />
-        </View>
-      }
+    <View style={styles.container}>
       <View style={styles.form}>
         <View style={styles.form_item}>
           <Text style={styles.title}>{ isNewUser ? 'Sign Up' : 'Login' }</Text>
@@ -190,33 +171,19 @@ export default function SignInUp() {
           </Text>
         </View>
       </View>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  userArea: {
-    width: '80%',
-    marginBottom: 20,
-    backgroundColor: '#222',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  userAreaText: {
-    color: '#eee',
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  userStatus: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#3fa333',
-    marginLeft: 5
+  container: {
+    flex: 1,
+    width: '100%',
+    height: 500,
+    backgroundColor: '#444',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20
   },
   form: {
     width: "80%",
@@ -293,4 +260,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 10
   }
-});
+})
