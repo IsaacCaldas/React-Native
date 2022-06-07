@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { StyleSheet, SafeAreaView, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 import firebase from '../../services/firebase_connection'
 import { useNavigation } from '@react-navigation/native'
@@ -133,7 +133,7 @@ export default function SignInUp() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.form}>
         <View style={styles.form_item}>
           <Text style={styles.title}>{ isNewUser ? 'Sign Up' : 'Login' }</Text>
@@ -188,7 +188,7 @@ export default function SignInUp() {
           </Text>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

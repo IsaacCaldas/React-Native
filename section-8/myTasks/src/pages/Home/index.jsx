@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import firebase from '../../services/firebase_connection'
@@ -40,7 +40,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <SafeAreaView>
       { user && load ? 
         <View style={styles.container}>
           <View style={styles.userArea}>
@@ -69,7 +69,7 @@ export default function Home() {
           <ActivityIndicator size="large" color="#a23d4b" />
         </View>
       }
-    </>
+    </SafeAreaView>
   )
 }
 
