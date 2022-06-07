@@ -7,50 +7,58 @@ import Users from './src/components/Users';
 
 export default function App() {
 
-  const [users, setUsers] = useState([]);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [password_not_match, setPasswordNotMatch] = useState(false);
+
   const [load, setLoad] = useState(false);
 
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-
   useEffect(() => {
-    fetchDataIntoFirebase();
-  }, []);
+    password !== password_confirmation ? setPasswordNotMatch(true) : setPasswordNotMatch(false);
+  }, [password_confirmation]);
 
-  async function fetchDataIntoFirebase() {
-    await firebase.database().ref('Users').on('value', (snapshot) => {
-      snapshot.forEach((child) => {
-        let user = {
-          key: child.key,
-          name: child.val().name,
-          age: child.val().age
-        }
-        
-        setUsers(users => [...users, user]);
-        setLoad(true);
-      })
-    })
-    console.log(users);
-  }
+  async function signUp(){
 
-  function saveData(){
+    setLoad(true);
 
-    if (name === '' || age === '') {
-      alert('Please fill the form');
+    if (email.length === 0 || password.length === 0) {
+      alert('Please fill in all fields');
+      setLoad(false);
       return;
-    } 
+    }
 
-    let users = firebase.database().ref('Users')
-    let key = users.push().key;
-
-    users.child(key).set({
-      name,
-      age
-    })
-
-    setName('');
-    setAge('');
-    alert('Data saved successfully');
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((value) => {
+        alert(`${value.user.email} is successfully registered`);
+        setEmail('');
+        setPassword('');
+        setLoad(false);
+      }).catch((error) => {
+        
+        if (error.code === 'auth/email-already-in-use') {
+          alert('Email already in use');
+          setEmail('');
+          setLoad(false);
+          return
+        }
+        else if (error.code === 'auth/invalid-email') {
+          alert('Invalid email');
+          setEmail('');
+          setLoad(false);
+          return
+        }
+        else if (error.code === 'auth/weak-password') {
+          alert('Password is weak, needs to be at least 6 characters');
+          setPassword('');
+          setLoad(false);
+          return
+        }
+        else {
+          alert('Internal server error');
+          setLoad(false);
+        }
+      });
    
     // create a node
     // await firebase.database().ref('type').set('admin')
@@ -84,28 +92,41 @@ export default function App() {
     <View style={styles.container}>
       <View style={styles.form}>
         <View style={styles.form_item}>
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Sign Up</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter your name"
-            onChangeText={(text) => setName(text)}
-            value={name}
+            placeholder="johndoe@who.com"
+            onChangeText={(text) => setEmail(text)}
+            value={email}
           />
           <TextInput
             style={styles.input}
-            placeholder="Enter your age"
-            onChangeText={(text) => setAge(text)}
-            value={age}
+            placeholder="Enter your password"
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
           />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm your password"
+            onChangeText={(text) => setPasswordConfirmation(text)}
+            value={password_confirmation}
+            secureTextEntry={true}
+          />
+          {password_not_match && <Text style={styles.error}>Password does not match</Text>}
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => saveData()}
+          onPress={() => signUp()}
         >
-          <Text style={styles.buttonText}>Save</Text>
+          {load ?  
+              <ActivityIndicator size="small" color="#fff" />
+            : 
+              <Text style={styles.buttonText}>Save</Text>
+          }
         </TouchableOpacity>
       </View>
-      { load ? 
+      {/* { load ? 
       <>
         <View style={styles.list}>
           <FlatList
@@ -119,7 +140,7 @@ export default function App() {
       <View style={styles.loading}>
         <ActivityIndicator size="large" color="#a23d4b" />
       </View>
-    }
+    } */}
     </View>
   );
 }
@@ -147,7 +168,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "80%",
-    height: 350,
+    height: 400,
     backgroundColor: '#222',
     alignItems: 'center',
     borderRadius: 10,
@@ -200,5 +221,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     marginTop: 20
+  },
+  error: {
+    color: '#a23d4b',
+    fontSize: 15,
+    marginTop: 10,
+    marginBottom: 10
   }
 });
