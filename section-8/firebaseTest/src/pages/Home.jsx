@@ -1,4 +1,5 @@
-import { StyleSheet, View, Text } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import firebase from '../services/firebase_connection'
@@ -11,6 +12,9 @@ export default function Home() {
   const route = useRoute();
   const navigation = useNavigation()
 
+  const [user, setUser] = useState()
+  const [load, setLoad] = useState(false)
+
   async function signOut() {
     await firebase.auth().signOut()
       .then(() => {
@@ -19,15 +23,29 @@ export default function Home() {
         serverError()
       });
   }
-  console.log(route.params.user)
+
+  useEffect(() => {
+    getUser()
+  }, [])
+
+  async function getUser() {
+    await firebase.database().ref('users').child(route.params.user).on('value', (snapshot) => {
+      let user = {
+        name: snapshot.val().name,
+        email: snapshot.val().email
+      }
+      setUser(user)
+      setLoad(true)
+    })
+  }
 
   return (
-    <View style={styles.container}>
-      { route.params.user && 
-        <>
+    <>
+      { user && load ? 
+        <View style={styles.container}>
           <View style={styles.userArea}>
             <Text style={styles.userAreaText}>
-              {route.params.user} <View style={styles.userStatus}/>
+              {user.email} <View style={styles.userStatus}/>
             </Text>
             <AntDesign
               name="logout"
@@ -40,18 +58,29 @@ export default function Home() {
             <Text style={styles.welcome}>
               Welcome to React Native 
               <Text style={styles.userWelcome}>
-                {route.params.user}
+                {user.name}
               </Text>
               !
             </Text>
           </View>
-        </>
+        </View>
+      :
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#a23d4b" />
+        </View>
       }
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#222',
+    width: '100%'
+  },
   container: {
     flex: 1,
     width: '100%',

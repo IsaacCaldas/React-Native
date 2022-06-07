@@ -10,8 +10,10 @@ export default function SignInUp() {
 
   const [isNewUser, setIsNewUser] = useState(false)
   const [load, setLoad] = useState(false)
-
   const [user, setUser] = useState()
+  const [logged, setLogged] = useState(false)
+
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password_confirmation, setPasswordConfirmation] = useState('')
@@ -22,13 +24,13 @@ export default function SignInUp() {
   }, [password_confirmation])
 
   useEffect(() => {
-    user && navigation.navigate('Home', { user })
+    user && navigation.navigate('Home', { user }) 
   }, [user])
 
   async function signUp(){
     setLoad(true)
 
-    if (email.length === 0 || password.length === 0) {
+    if (email.length === 0 || password.length === 0 || name.length === 0) {
       alert('Please fill in all fields')
       setLoad(false)
       return
@@ -41,11 +43,20 @@ export default function SignInUp() {
 
     await firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((value) => {
+        
+        firebase.database().ref('users').child(value.user.uid).set({
+          name: name,
+          email: email
+        })
+
         alert(`${value.user.email} is successfully registered`)
+        setName('')
         setEmail('')
         setPassword('')
+        setPasswordConfirmation('')
         setIsNewUser(false)
         setLoad(false)
+
       }).catch((error) => {
         
         if (error.code === 'auth/email-already-in-use') {
@@ -82,12 +93,10 @@ export default function SignInUp() {
 
     await firebase.auth().signInWithEmailAndPassword(email, password)
       .then((value) => {
-        alert(`Welcome ${value.user.email}!`)
         setEmail('')
         setPassword('')
-        setIsNewUser(false)
         setLoad(false)
-        setUser(value.user.email)
+        setUser(value.user.uid)
       }
       ).catch((error) => {
         if (error.code === 'auth/invalid-email') {
@@ -128,6 +137,14 @@ export default function SignInUp() {
       <View style={styles.form}>
         <View style={styles.form_item}>
           <Text style={styles.title}>{ isNewUser ? 'Sign Up' : 'Login' }</Text>
+          { isNewUser &&
+            <TextInput
+              style={styles.input}
+              placeholder="Enter you name"
+              onChangeText={(text) => setName(text)}
+              value={name}
+            />
+          }
           <TextInput
             style={styles.input}
             placeholder="johndoe@who.com"
