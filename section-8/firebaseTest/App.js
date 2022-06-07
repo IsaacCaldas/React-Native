@@ -1,26 +1,46 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 
 import firebase from './src/services/firebase_connection';
 
+import Users from './src/components/Users';
+
 export default function App() {
+
+  const [users, setUsers] = useState([]);
+  const [load, setLoad] = useState(false);
 
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    // fetchDataIntoFirebase();
+    fetchDataIntoFirebase();
   }, []);
 
-  async function saveData(){
+  async function fetchDataIntoFirebase() {
+    await firebase.database().ref('Users').on('value', (snapshot) => {
+      snapshot.forEach((child) => {
+        let user = {
+          key: child.key,
+          name: child.val().name,
+          age: child.val().age
+        }
+        
+        setUsers(users => [...users, user]);
+        setLoad(true);
+      })
+    })
+    console.log(users);
+  }
+
+  function saveData(){
 
     if (name === '' || age === '') {
       alert('Please fill the form');
       return;
     } 
 
-    let users = await firebase.database().ref('Users');
+    let users = firebase.database().ref('Users')
     let key = users.push().key;
 
     users.child(key).set({
@@ -85,6 +105,21 @@ export default function App() {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </View>
+      { load ? 
+      <>
+        <View style={styles.list}>
+          <FlatList
+            data={users}
+            renderItem={({ item }) => <Users data={item} />}
+            keyExtractor={item => item.key}
+          />
+        </View>
+      </>
+      :
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#a23d4b" />
+      </View>
+    }
     </View>
   );
 }
@@ -95,6 +130,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#444',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 20
+  },
+  list: {
+    width: '80%',
+    marginTop: 20,
+    backgroundColor: '#222',
+    padding: 20,
+    borderRadius: 10,
   },
   welcomeText: {
     fontSize: 20,
@@ -147,5 +190,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textTransform: 'uppercase'
+  },
+  loading: {
+    width: "80%",
+    height: 80,
+    backgroundColor: '#222',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20
   }
 });
