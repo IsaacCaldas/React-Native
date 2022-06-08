@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView, View, Text, ActivityIndicator } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { StyleSheet, SafeAreaView, View, Text, ActivityIndicator, TextInput, TouchableOpacity } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 import firebase from '../../services/firebase_connection'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-import { useNavigation } from '@react-navigation/native'
+import TaskList from '../../components/TaskList'
 
 export default function Home() {
 
@@ -14,6 +14,14 @@ export default function Home() {
 
   const [user, setUser] = useState()
   const [load, setLoad] = useState(false)
+  const [task, setTask] = useState()
+
+  let taskTest = [
+    { id: 0, name: 'Buy a new notebook', checked: true},
+    { id: 1, name: 'Do a homework', checked: false },
+    { id: 2, name: 'Travel to Salto', checked: false},
+    { id: 3, name: 'Go to gym', checked: true} 
+  ]
 
   async function signOut() {
     await firebase.auth().signOut()
@@ -39,13 +47,19 @@ export default function Home() {
     })
   }
 
+  async function addNewTask() {
+    
+    await firebase.database().ref('users').child('tasks').ref()
+
+  }
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       { user && load ? 
-        <View style={styles.container}>
+        <View style={styles.task}>
           <View style={styles.userArea}>
             <Text style={styles.userAreaText}>
-              {user.email} <View style={styles.userStatus}/>
+              <View style={styles.userStatus}/> {user.name}
             </Text>
             <AntDesign
               name="logout"
@@ -54,19 +68,33 @@ export default function Home() {
               onPress={() => signOut()}
             />
           </View>
-          <View style={styles.welcomeArea}>
-            <Text style={styles.welcome}>
-              Welcome to React Native 
-              <Text style={styles.userWelcome}>
-                {user.name}
-              </Text>
-              !
+          <View style={styles.mainContent}>
+            <Text style={styles.title}>
+              my<Text style={styles.titleTask}>Tasks</Text>
             </Text>
+
+            <View style={styles.inputArea}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter a new task to do"
+                onChangeText={(text) => setTask(text)}
+                value={task}
+                placeholderTextColor="#666"
+              />
+              <TouchableOpacity style={styles.button} onPress={() => addNewTask()}>
+                <AntDesign
+                  name="pluscircleo"
+                  size={30}
+                  color="#eee"
+                />
+              </TouchableOpacity>
+            </View>
+            <TaskList task={taskTest} />
           </View>
         </View>
       :
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#a23d4b" />
+          <ActivityIndicator size="large" color="#c33333" />
         </View>
       }
     </SafeAreaView>
@@ -74,23 +102,23 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#222',
-    width: '100%'
-  },
   container: {
     flex: 1,
     width: '100%',
-    height: 500,
-    backgroundColor: '#222',
+    backgroundColor: '#222'
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  task: {
+    flex: 1,
     alignItems: 'center',
-    padding: 20
+    padding: 20,
   },
   userArea: {
-    width: '95%',
+    width: '100%',
     marginBottom: 20,
     backgroundColor: '#444',
     paddingVertical: 10,
@@ -110,27 +138,46 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: '#3fa333',
-    marginLeft: 5
+    marginRight: 5
   },
-  welcomeArea: {
-    width: '95%',
+  mainContent: {
+    flex: 2,
+    width: '100%',
     backgroundColor: '#444',
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    textJustify: 'justify',
-    wordBreak: 'break-all'
+    flexDirection: "column"
   },
-  welcome: {
+  title: {
     fontSize: 30,
-    color: '#eee'
+    color: '#eee',
+    textAlign: 'center'
   },
-  userWelcome: {
-    fontSize: 30,
+  titleTask: {
     color: '#c33333',
-    fontWeight: 'bold',
-    marginLeft: 10  
+    fontWeight: 'bold'
+  },
+  inputArea: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10
+  },  
+  input: {
+    width: "85%",
+    height: 40,
+    borderColor: '#c33333',
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 10,
+    color: '#fff',
+    backgroundColor: '#333'
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center"
   }
 })

@@ -5,7 +5,7 @@ import firebase from '../../services/firebase_connection'
 import { useNavigation } from '@react-navigation/native'
 
 export default function SignInUp() {
-
+  
   const navigation = useNavigation()
 
   const [isNewUser, setIsNewUser] = useState(false)
@@ -143,6 +143,7 @@ export default function SignInUp() {
               placeholder="Enter you name"
               onChangeText={(text) => setName(text)}
               value={name}
+              placeholderTextColor="#666" 
             />
           }
           <TextInput
@@ -150,6 +151,7 @@ export default function SignInUp() {
             placeholder="johndoe@who.com"
             onChangeText={(text) => setEmail(text)}
             value={email}
+            placeholderTextColor="#666"
           />
           <TextInput
             style={styles.input}
@@ -157,6 +159,7 @@ export default function SignInUp() {
             onChangeText={(text) => setPassword(text)}
             value={password}
             secureTextEntry={true}
+            placeholderTextColor="#666"
           />
           { isNewUser && 
             <TextInput
@@ -165,20 +168,21 @@ export default function SignInUp() {
               onChangeText={(text) => setPasswordConfirmation(text)}
               value={password_confirmation}
               secureTextEntry={true}
+              placeholderTextColor="#666"
             />
           }
-          {password_not_match && <Text style={styles.error}>Password does not match</Text>}
+          {isNewUser && password_not_match && <Text style={styles.error}>Password does not match</Text>}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => isNewUser ? signUp() : signIn()}
+          >
+            {load ?  
+                <ActivityIndicator size="small" color="#fff" />
+              : 
+                <Text style={styles.buttonText}>{ isNewUser ? 'Save' : 'Sign In' }</Text>
+            }
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => isNewUser ? signUp() : signIn()}
-        >
-          {load ?  
-              <ActivityIndicator size="small" color="#fff" />
-            : 
-              <Text style={styles.buttonText}>{ isNewUser ? 'Save' : 'Sign In' }</Text>
-          }
-        </TouchableOpacity>
 
         <View style={styles.signUpArea}>
           <Text style={styles.signUpTitle}>{ isNewUser ? 'Already have an account?' : 'Don\'t have an account?' }
@@ -196,7 +200,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    height: 500,
     backgroundColor: '#444',
     alignItems: 'center',
     justifyContent: 'center',
@@ -225,7 +228,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 40,
-    borderColor: '#a23d4b',
+    borderColor: '#c33333',
     borderWidth: 1,
     marginTop: 10,
     marginBottom: 10,
@@ -234,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#333'
   },
   button: {
-    backgroundColor: '#a23d4b',
+    backgroundColor: '#c33333',
     width: "100%",
     padding: 10,
     marginTop: 10,
@@ -259,7 +262,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   error: {
-    color: '#a23d4b',
+    color: '#c33333',
     fontSize: 15,
     marginTop: 10,
     marginBottom: 10
@@ -273,7 +276,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonSignUpText: {
-    color: '#a23d4b',
+    color: '#c33333',
     fontSize: 14,
     marginLeft: 10
   }
