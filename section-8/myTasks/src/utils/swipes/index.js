@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
+import firebase from '../../services/firebase_connection'
+
 const Separator = () => <View style={styles.itemSeparator} />
 
 const rightSwipeActions = () => {
@@ -15,8 +17,9 @@ const rightSwipeActions = () => {
   )
 }
 
-const swipeFromRightOpen = () => {
-  alert('Swipe from right');
+const swipeFromRightOpen = async (item, user) => {
+  await firebase.database().ref('tasks').child(user).child(item.id).remove()
+    .catch((error) => alert("Internal error, try again later. :("))
 }
 
 export {  

@@ -5,40 +5,61 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 import { Separator, rightSwipeActions, swipeFromRightOpen } from '../../utils/swipes'
 
-export default function TaskList({task}) {
+import firebase from '../../services/firebase_connection'
+
+export default function TaskList({user}) {
 
   const [tasks, setTasks] = useState()
 
-  // useEffect(()=>{
-  // }, [])
+  useEffect(()=>{
+    getTasks()
+  }, [user])
 
-  // useEffect(()=>{
-  // }, [task])
+  async function getTasks() {
+
+    await firebase.database().ref('tasks').child(user).on('value', (snapshot) => {
+      setTasks([])
+
+      snapshot?.forEach((childItem) => {
+        let data = {
+          id: childItem.key,
+          name: childItem.val().name,
+          checked: childItem.val().checked
+        }
+        setTasks(state => [...state, data])
+      })
+    })
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={task}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => <Task item={item} />}
+        data={tasks}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => <Task item={item} user={user} />}
         ItemSeparatorComponent={() => <Separator />}
       />
     </View>
   )
 }
 
-export function Task({item}) {
-  // const [checked, setChecked] = useState(false)
+export function Task({item, user}) {
+ 
+  async function setChecked(checked) {
+    await firebase.database().ref('tasks').child(user).child(item.id).update({
+      checked
+    }).catch((error) => alert("Internal error, try again later. :("))
+  }
 
   return (
     <Swipeable
       renderRightActions={rightSwipeActions}
-      onSwipeableRightOpen={swipeFromRightOpen}
+      onSwipeableRightOpen={() => swipeFromRightOpen(item, user)}
     >
       <View style={styles.item}>
         <TouchableOpacity 
           style={styles.checkboxArea} 
-          onPress={() => setChecked(!checked)}
+          onPress={() => setChecked(!item.checked)}
         >
           {item.checked && 
             <View style={[styles.checkbox, item.checked && styles.checked]}>

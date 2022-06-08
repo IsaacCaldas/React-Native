@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView, View, Text, ActivityIndicator, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, ActivityIndicator, TextInput, TouchableOpacity, Keyboard } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
 import firebase from '../../services/firebase_connection'
@@ -14,14 +14,7 @@ export default function Home() {
 
   const [user, setUser] = useState()
   const [load, setLoad] = useState(false)
-  const [task, setTask] = useState()
-
-  let taskTest = [
-    { id: 0, name: 'Buy a new notebook', checked: true},
-    { id: 1, name: 'Do a homework', checked: false },
-    { id: 2, name: 'Travel to Salto', checked: false},
-    { id: 3, name: 'Go to gym', checked: true} 
-  ]
+  const [newTask, setNewTask] = useState()
 
   async function signOut() {
     await firebase.auth().signOut()
@@ -47,10 +40,25 @@ export default function Home() {
     })
   }
 
-  async function addNewTask() {
+  function addNewTask() {
     
-    await firebase.database().ref('users').child('tasks').ref()
+    if (!newTask) {
+      return
+    } else {
+      let taskChild = firebase.database().ref('tasks').child(route.params.user)
+      let key = taskChild.push().key
 
+      taskChild.child(key).set({
+        name: newTask,
+        checked: false
+
+      }).catch((error) => {
+        alert("Internal error, try again later. :(")
+      })
+    }
+    setNewTask("")
+    Keyboard.dismiss()
+    return
   }
 
   return (
@@ -77,8 +85,8 @@ export default function Home() {
               <TextInput
                 style={styles.input}
                 placeholder="Enter a new task to do"
-                onChangeText={(text) => setTask(text)}
-                value={task}
+                onChangeText={(text) => setNewTask(text)}
+                value={newTask}
                 placeholderTextColor="#666"
               />
               <TouchableOpacity style={styles.button} onPress={() => addNewTask()}>
@@ -89,7 +97,7 @@ export default function Home() {
                 />
               </TouchableOpacity>
             </View>
-            <TaskList task={taskTest} />
+            <TaskList user={route.params.user}/>
           </View>
         </View>
       :
