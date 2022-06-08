@@ -183,7 +183,7 @@ export default function SignInUp() {
                 {checked && 
                   <FontAwesome
                     name="check"
-                    size={13}
+                    size={15}
                     color="#fff"
                   />
                 }
@@ -193,7 +193,6 @@ export default function SignInUp() {
           }
 
           {isNewUser && password_not_match && <Text style={styles.error}>Password does not match</Text>}
-          
           <TouchableOpacity
             style={styles.button}
             onPress={() => isNewUser ? signUp() : signIn()}
@@ -306,23 +305,4 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 20
   },
-  error: {
-    color: '#c33333',
-    fontSize: 15,
-    marginTop: 10,
-    marginBottom: 10
-  },
-  signUpArea: {
-    flexDirection: 'row'
-  },
-  signUpTitle: {
-    color: '#eee',
-    fontSize: 14,
-    fontWeight: 'bold'
-  },
-  buttonSignUpText: {
-    color: '#c33333',
-    fontSize: 14,
-    marginLeft: 10
-  }
 })

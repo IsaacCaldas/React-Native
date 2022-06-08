@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
@@ -53,8 +53,8 @@ export function Task({item, user}) {
 
   return (
     <Swipeable
-      renderRightActions={rightSwipeActions}
-      onSwipeableRightOpen={() => swipeFromRightOpen(item, user)}
+    renderRightActions={rightSwipeActions}
+    onSwipeableRightOpen={() => swipeFromRightOpen(item, user)}
     >
       <View style={styles.item}>
         <TouchableOpacity 
@@ -62,7 +62,7 @@ export function Task({item, user}) {
           onPress={() => setChecked(!item.checked)}
         >
           {item.checked && 
-            <View style={[styles.checkbox, item.checked && styles.checked]}>
+            <View style={item.checked && styles.checked}>
               <FontAwesome
                 name="check"
                 size={15}
@@ -101,18 +101,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#222'
   },
-  checkbox: {
+  checked: {
     width: 25,
     height: 25,
     borderRadius: 12.5,
-    borderColor: "#eee",
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center", 
-    marginRight: 10
-  },
-  checked: {
+    marginRight: 10,
     backgroundColor: "#3fa333",
     borderColor: "#3fa333"
   },
