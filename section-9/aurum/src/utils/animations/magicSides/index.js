@@ -31,18 +31,10 @@ function magicSide(side) {
 
 function magicSideParallel(sides) {
   return Animated.parallel([
-    // topSide(sides.top_side),
-    // leftSide(sides.left_side)
-    Animated.timing(sides[0].prop, {
-      toValue: sides[0].value,
-      duration: sides[0].duration,
-      useNativeDriver: true
-    }),
-    Animated.timing(sides[1].prop, {
-      toValue: sides[1].value,
-      duration: sides[1].duration,
-      useNativeDriver: true
-    })
+    topSide(sides.top_side),
+    rightSide(sides.right_side),
+    bottomSide(sides.bottom_side),
+    leftSide(sides.left_side)
   ]).start()
 }
 function magicSideSequence(sides) {

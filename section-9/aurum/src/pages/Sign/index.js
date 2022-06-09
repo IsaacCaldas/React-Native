@@ -42,20 +42,20 @@ export default function Sign() {
     if (email || focus ){
       side = {
         parallel: true,
-        sides: [
-          {prop: top, value: 0, duration: 100},
-          { prop: left, value: 0,  duration: 100}
-        ]
+        sides: {
+          top_side: {prop: top, value: 1, duration: 100},
+          left_side: {prop: left, value: 1,  duration: 100}
+        }
       }
       magicSide(side)
 
     } else {
       side = {
         parallel: true,
-        sides: [
-          {prop: top, value: 0, duration: 100},
-          { prop: left, value: 0,  duration: 100}
-        ]
+        sides: {
+          top_side: {prop: top, value: 0, duration: 100},
+          left_side: {prop: left, value: 0,  duration: 100}
+        }
       }
       magicSide(side)
     }
