@@ -229,7 +229,9 @@ const styles = StyleSheet.create({
   },
   rememberArea: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 91,
+    marginBottom: 6
   },
   checkbox: {
     width: 18,
