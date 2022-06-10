@@ -1,65 +1,43 @@
 import { Animated } from 'react-native'
 
-export default function magicSide(side) {
-  if(side) {
-    if (side.parallel) {
-      return magicSideParallel(side.sides)
-    } else {
-      return magicSideSequence(side.sides)
-    }
+export default function magicSide(
+  parallel, 
+  side_one = null,
+  side_two = null,  
+  side_three = null,
+  side_four = null
+) {
+  if (parallel) {
+    let animated_method = 'sequence'
+    return magicSideParallel(animated_method, side_one, side_two, side_three, side_four)
+  } else {
+    return magicSideSequence(side_one, side_two, side_three, side_four)
   }
 }
 
-function magicSideParallel(sides) {
-  return Animated.parallel([
-    topSide(sides.top_side),
-    rightSide(sides.right_side),
-    bottomSide(sides.bottom_side),
-    leftSide(sides.left_side)
-  ]).start()
+function magicSideParallel(animated_method, side_one, side_two, side_three, side_four) {
+  return Animated[animated_method](callSides(
+    side_one, side_two, side_three, side_four
+  )).start()
 }
-function magicSideSequence(sides) {
-  return Animated.sequence([
-    topSide(sides.top_side),
-    rightSide(sides.right_side),
-    bottomSide(sides.bottom_side),
-    leftSide(sides.left_side)
-  ]).start()
+function magicSideSequence(side_one, side_two, side_three, side_four) {
+  return Animated.sequence(callSides(
+    side_one, side_two, side_three, side_four
+  )).start()
 }
 
-function topSide(top_side) {
-  if(top_side){
-    const { prop, value, duration } = top_side
-    return Animated.timing(prop, {
-      toValue: value,
-      duration: duration,
-      useNativeDriver: true
-    })
-  }
+function callSides(side_one, side_two, side_three, side_four) {
+  return [
+    sideMoving(side_one),
+    sideMoving(side_two),
+    sideMoving(side_three),
+    sideMoving(side_four)
+  ]
 }
-function rightSide(right_side) {
-  if(right_side) {
-    const { prop, value, duration } = right_side
-    return Animated.timing(prop, {
-      toValue: value,
-      duration: duration,
-      useNativeDriver: true
-    })
-  }
-}
-function bottomSide(bottom_side) {
-  if(bottom_side) {
-    const { prop, value, duration } = bottom_side
-    return Animated.timing(prop, {
-      toValue: value,
-      duration: duration,
-      useNativeDriver: true
-    })
-  }
-}
-function leftSide(left_side) {
-  if(left_side) {
-    const { prop, value, duration } = left_side
+
+function sideMoving(side) {
+  if(side){
+    const { prop, value, duration } = side
     return Animated.timing(prop, {
       toValue: value,
       duration: duration,

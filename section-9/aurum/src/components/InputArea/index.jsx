@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef } from "react"
 import { View, Text, Animated } from 'react-native'
 import { Input } from '../../styles/styleds'
 import { magicSide } from '../../utils/animations'
@@ -26,35 +26,28 @@ export default function InputArea({
   //   inputRange: [0, 1],
   //   outputRange: ['-30px', '0px']
   // })
-  const left = useRef(new Animated.Value(10)).current
+  const left = useRef(new Animated.Value(0)).current
   const leftValue = left.interpolate({
     inputRange: [0, 1],
     outputRange: ['10px', '0px']
   })
 
   useEffect(() => {
-    let side = []
-    
-    if (value || focus ){
-      side = {
-        parallel: true,
-        sides: {
-          top_side: {prop: top, value: 1, duration: 100},
-          left_side: {prop: left, value: 1,  duration: 100}
-        }
-      }
-      magicSide(side)
+    let parallel = true
+    let top_side
+    let left_side 
 
-    } else {
-      side = {
-        parallel: true,
-        sides: {
-          top_side: {prop: top, value: 0, duration: 100},
-          left_side: {prop: left, value: 0,  duration: 100}
-        }
-      }
-      magicSide(side)
+    if (value || focus ){
+      top_side = {prop: top, value: 1, duration: 500}
+      left_side = {prop: left, value: 1,  duration: 500}
     }
+    else {
+      top_side = {prop: top, value: 0, duration: 500}
+      left_side = {prop: left, value: 0,  duration: 500}
+    }
+
+    magicSide(parallel, top_side, left_side)
+
   }, [value, focus]) 
 
   return (
