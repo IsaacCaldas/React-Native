@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { StyleSheet, View, Text, ActivityIndicator, Platform, TouchableOpacity } from 'react-native'
 import { Container, Modal, Logo, Form,
          Button, ButtonText } from '../../styles/styleds'
+
+import { AuthContext } from '../../contexts/auth'
 
 import InputArea from '../../components/InputArea'
 import Checkbox from '../../components/CheckBox'
 import AccountText from '../../components/AccountText'
 
 export default function SignIn() {
+
+  const { user } = useContext(AuthContext)
 
   const [load, setLoad] = useState()
   const [disabled, setDisabled] = useState(true)
@@ -16,6 +20,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
 
+
   useEffect(() => {
     email && password ? setDisabled(false) : setDisabled(true)
   }, [email, password])
@@ -23,6 +28,7 @@ export default function SignIn() {
   async function signIn() {
 
     setLoad(true)
+    console.log(user.name)
 
   }
 

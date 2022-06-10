@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { StyleSheet, Text, ActivityIndicator, Platform} from 'react-native'
 import { Container, Modal, Logo, Form,
          Button, ButtonText } from '../../styles/styleds'
+
+import { AuthContext } from '../../contexts/auth'
 
 import InputArea from '../../components/InputArea'
 import AccountText from '../../components/AccountText'
 
 export default function SignUp() {
+
+  const { user } = useContext(AuthContext)
 
   const [load, setLoad] = useState(false)
   const [disabled, setDisabled] = useState(true)
