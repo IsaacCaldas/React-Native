@@ -1,25 +1,6 @@
 import { Animated } from 'react-native'
 
-export {
-  magicSide
-}
-
-function labelUp(side_one, side_two) {
-  Animated.parallel([
-    Animated.timing(side_one, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true
-    }),
-    Animated.timing(side_two, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true
-    })
-  ]).start()
-}
-
-function magicSide(side) {
+export default function magicSide(side) {
   if(side) {
     if (side.parallel) {
       return magicSideParallel(side.sides)
@@ -47,7 +28,6 @@ function magicSideSequence(sides) {
 }
 
 function topSide(top_side) {
-  console.log("TOP:", top_side)
   if(top_side){
     const { prop, value, duration } = top_side
     return Animated.timing(prop, {
@@ -58,7 +38,6 @@ function topSide(top_side) {
   }
 }
 function rightSide(right_side) {
-  console.log("RIGHT:", right_side)
   if(right_side) {
     const { prop, value, duration } = right_side
     return Animated.timing(prop, {
@@ -69,7 +48,6 @@ function rightSide(right_side) {
   }
 }
 function bottomSide(bottom_side) {
-  console.log("BOTTOM:", bottom_side)
   if(bottom_side) {
     const { prop, value, duration } = bottom_side
     return Animated.timing(prop, {
@@ -80,7 +58,6 @@ function bottomSide(bottom_side) {
   }
 }
 function leftSide(left_side) {
-  console.log("LEFT:",left_side)
   if(left_side) {
     const { prop, value, duration } = left_side
     return Animated.timing(prop, {

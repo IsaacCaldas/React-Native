@@ -19,8 +19,6 @@ const Logo = styled.Image`
 const Form = styled.View`
   width: 100%;
 `
-const InputArea = styled.View`
-`
 const Input = styled.TextInput`
   width: 100%;
   height: 40px;
@@ -64,8 +62,7 @@ export {
   Container, 
   Modal, 
   Logo, 
-  Form, 
-  InputArea,
+  Form,
   Input, 
   CheckBox, 
   Button, 
