@@ -1,10 +1,20 @@
+import { useState, useEffect, createContext } from "react"
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
+
 import firebase from '../services/firebase_connection'
-import { useState, createContext } from "react"
 
 export const AuthContext = createContext({})
 
 export default function AuthProvider({ children }) {
+
+  const navigation = useNavigation()
   const [user, setUser] = useState(null)
+  const [load, setLoad] = useState(true)
+
+  useEffect(() => {
+    loadStorage()
+  }, [])
 
   async function signUp(name, email, password) {
     await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -22,6 +32,8 @@ export default function AuthProvider({ children }) {
             email
           }
           setUser(data) 
+          toStore(data)
+
         }).catch((error) => {
           alert("Internal server error, try again.", error.code) 
           return false
@@ -58,6 +70,8 @@ export default function AuthProvider({ children }) {
               email: value.user.email
             }
             setUser(data)
+            toStore(data)
+
           }).catch((error) => {
             alert('Internal server error, try again.')
             return false
@@ -71,8 +85,30 @@ export default function AuthProvider({ children }) {
       })
   }
 
+  async function signOut() {
+    await firebase.auth().signOut()
+      .then(() => {
+        navigation.navigate('SignUp')
+      }).catch((error) => {
+        alert('Internal server error', error.code)
+      });
+  }
+
+  async function toStore(data) {
+    await AsyncStorage.setItem('Auth_user', JSON.stringify(data))
+  }
+
+  async function loadStorage() {
+    let auth_user = await AsyncStorage.getItem('Auth_user')
+
+    if(auth_user) {
+      setUser(JSON.parse(auth_user))
+    } 
+    setLoad(false)
+  }
+
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signIn, signUp }}>
+    <AuthContext.Provider value={{ signed: !!user, user, load, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )
