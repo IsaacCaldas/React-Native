@@ -1,6 +1,6 @@
-import magicSide from './magic_side'
+import magicSideParallel from './magic_side_parallel'
 
 export {
-  magicSide
+  magicSideParallel
 }
 

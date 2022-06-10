@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { View, Text, Animated } from 'react-native'
 import { Input } from '../../styles/styleds'
-import { magicSide } from '../../utils/animations'
+import { magicSideParallel } from '../../utils/animations'
 
 export default function InputArea({
   value,
@@ -33,20 +33,18 @@ export default function InputArea({
   })
 
   useEffect(() => {
-    let parallel = true
-    let top_side
-    let left_side 
-
-    if (value || focus ){
-      top_side = {prop: top, value: 1, duration: 500}
-      left_side = {prop: left, value: 1,  duration: 500}
+    let top_side = {
+      prop: top,
+      value: value || focus ? 1 : 0,
+      duration: 100
     }
-    else {
-      top_side = {prop: top, value: 0, duration: 500}
-      left_side = {prop: left, value: 0,  duration: 500}
+    let left_side = {
+      prop: left, 
+      value: value || focus ? 1 : 0,
+      duration: 100
     }
 
-    magicSide(parallel, top_side, left_side)
+    magicSideParallel(top_side, left_side)
 
   }, [value, focus]) 
 
