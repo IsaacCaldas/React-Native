@@ -4,7 +4,7 @@ const Container = styled.SafeAreaView`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #222;
+  background-color: #161616;
 `
 const Modal = styled.KeyboardAvoidingView`
   width: 75%;
@@ -14,7 +14,7 @@ const Modal = styled.KeyboardAvoidingView`
 const Logo = styled.Image`
   width: 150px;
   height: 150px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 `
 const Form = styled.View`
   width: 100%;
@@ -25,9 +25,11 @@ const Input = styled.TextInput`
   padding: 10px;
   border-bottom-color: #2aa444;
   border-bottom-width: 2px;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
   font-size: 16px;
   color: #eee;
+  background-color: #1e1e1e99;
+  border-radius: 5px;
   z-index: 100;
 `
 const CheckBox = styled.TouchableOpacity`
@@ -42,18 +44,17 @@ const CheckBox = styled.TouchableOpacity`
 `
 const Button = styled.TouchableOpacity`
   width: 100%;
-  height: 35px;
-  padding: 30px;
-  background-color: #2aa444;
+  height: 50px;
+  background-color: ${props => props.disableStyle};
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-vertical: 30px;
-  box-shadow: 0px 0px 8px teal;
+  box-shadow: 0px 0px 8px ${props => props.shadow};
 `
 const ButtonText = styled.Text`
-  color: #fff;
+  color: ${props => props.disableStyle};
   font-size: 20px;
   font-weight: bold;
 `

@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Sign from '../pages/Sign'
+import SignUp from '../pages/Sign/SignUp';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -10,7 +11,8 @@ export default function AuthRoutes() {
         headerShown: false
       }}
     >
-      <AuthStack.Screen name="Sign" component={Sign}/>
+      <AuthStack.Screen name="SignIn" component={Sign}/>
+      <AuthStack.Screen name="SignUp" component={SignUp}/>
     </AuthStack.Navigator>
   )
 }

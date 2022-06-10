@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react"
-import { View, Text, Animated } from 'react-native'
+import { View, Animated, Keyboard } from 'react-native'
 import { Input } from '../../styles/styleds'
 import { magicSideParallel } from '../../utils/animations'
 
 export default function InputArea({
   value,
   setValue,
+  password,
   placeHolder
 }){
 
@@ -14,7 +15,12 @@ export default function InputArea({
   const top = useRef(new Animated.Value(0)).current
   const topValue = top.interpolate({
     inputRange: [0, 1],
-    outputRange: ['30px', '0px']
+    outputRange: ['30px', '-5px']
+  })
+  const left = useRef(new Animated.Value(0)).current
+  const leftValue = left.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['10px', '5px']
   })
   // const right = useRef(new Animated.Value(0)).current
   // const rightValue = right.interpolate({
@@ -26,11 +32,6 @@ export default function InputArea({
   //   inputRange: [0, 1],
   //   outputRange: ['-30px', '0px']
   // })
-  const left = useRef(new Animated.Value(0)).current
-  const leftValue = left.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['10px', '0px']
-  })
 
   useEffect(() => {
     let top_side = {
@@ -63,8 +64,12 @@ export default function InputArea({
         autoCorrect={false}
         autoCapitalize="none"
         value={value}
+        secureTextEntry={password}
         onFocus={() => setFocus(!focus)}
-        onBlur={() => setFocus(!focus)}
+        onBlur={() => {
+          setFocus(!focus)
+          Keyboard.dismiss()
+        }}
         onChangeText={(text) => setValue(text)}
       />
     </View>
