@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { StyleSheet, View, Text, ActivityIndicator, Platform, TouchableOpacity } from 'react-native'
 import { Container, Modal, Logo, Form,
          Button, ButtonText } from '../../styles/styleds'
+
+import { AuthContext } from '../../contexts/auth'
 
 import InputArea from '../../components/InputArea'
 import Checkbox from '../../components/CheckBox'
 import AccountText from '../../components/AccountText'
 
 export default function SignIn() {
+
+  const { signed, signIn } = useContext(AuthContext)
 
   const [load, setLoad] = useState()
   const [disabled, setDisabled] = useState(true)
@@ -21,10 +25,12 @@ export default function SignIn() {
     email && password ? setDisabled(false) : setDisabled(true)
   }, [email, password])
 
-  async function signIn() {
-
+  function handleSignIn() {
     setLoad(true)
-
+    setEmail('')
+    setPassword('')
+    signIn(email, password)
+    !signed && setLoad(false)
   }
 
   return(
@@ -63,7 +69,7 @@ export default function SignIn() {
                disableStyle={disabled ? '#2aa44466' : '#2aa444'}
                shadow={disabled ? 'transparent' : 'teal'}
                disabled={disabled}
-               onPress={() => signIn()}
+               onPress={() => handleSignIn()}
             >
               {load ?  
                 <ActivityIndicator size="small" color="#fff" />

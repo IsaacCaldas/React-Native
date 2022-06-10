@@ -10,7 +10,7 @@ import AccountText from '../../components/AccountText'
 
 export default function SignUp() {
 
-  const { signUp } = useContext(AuthContext)
+  const { signed, signUp } = useContext(AuthContext)
 
   const [load, setLoad] = useState(false)
   const [disabled, setDisabled] = useState(true)
@@ -38,10 +38,14 @@ export default function SignUp() {
 
   function handleSignUp() {
     setLoad(true)
+    setName('')
+    setEmail('')
+    setPassword('')
+    setPasswordConfirmation('')
     signUp(name, email, password)
-    setLoad(false)
+    !signed && setLoad(false)
   }
-  
+
   return(
     <Container
       behavior={Platform.OS === 'ops' ? 'padding' : ''}

@@ -1,5 +1,5 @@
-import { useState, createContext } from "react"
 import firebase from '../services/firebase_connection'
+import { useState, createContext } from "react"
 
 export const AuthContext = createContext({})
 
@@ -21,30 +21,58 @@ export default function AuthProvider({ children }) {
             name,
             email
           }
-          setUser(data)
-          return 
+          setUser(data) 
         }).catch((error) => {
-          alert("Internal server error, try again.")
-          return 
+          alert("Internal server error, try again.", error.code) 
+          return false
         })
       }).catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
           alert('Email already in use')
-          return
+          return false
         }
         else if (error.code === 'auth/invalid-email') {
           alert('Invalid email')
-          return
+          return false
         }
         else if (error.code === 'auth/weak-password') {
           alert('Password is weak, needs to be at least 6 characters');
-          return
+          return false
+        }
+        else {
+          alert('Internal server error')
         }
       })
   }
 
+  async function signIn(email, password) {
+    await firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(async (value) => {
+        let uid = value.user.uid
+
+        await firebase.database().ref('users').child(uid).once('value')
+          .then((snapshot) => {
+            let data = {
+              uid,
+              name: snapshot.val().name,
+              email: value.user.email
+            }
+            setUser(data)
+          }).catch((error) => {
+            alert('Internal server error, try again.')
+            return false
+          })
+      }).catch((error) => {
+        if (error.code === 'auth/invalid-email') {
+          alert('Invalid email')
+          return false
+        }
+        alert('Internal server error', error.code)
+      })
+  }
+
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signUp }}>
+    <AuthContext.Provider value={{ signed: !!user, user, signIn, signUp }}>
       {children}
     </AuthContext.Provider>
   )
