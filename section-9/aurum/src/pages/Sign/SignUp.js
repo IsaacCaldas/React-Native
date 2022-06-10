@@ -10,7 +10,7 @@ import AccountText from '../../components/AccountText'
 
 export default function SignUp() {
 
-  const { user } = useContext(AuthContext)
+  const { signUp } = useContext(AuthContext)
 
   const [load, setLoad] = useState(false)
   const [disabled, setDisabled] = useState(true)
@@ -36,15 +36,12 @@ export default function SignUp() {
     }
   }, [name, email, password, passwordConfirmation])
 
-  async function signUp() {
-
+  function handleSignUp() {
     setLoad(true)
-
-    
-
+    signUp(name, email, password)
+    setLoad(false)
   }
-
-
+  
   return(
     <Container
       behavior={Platform.OS === 'ops' ? 'padding' : ''}
@@ -93,7 +90,7 @@ export default function SignUp() {
             disableStyle={disabled ? '#2aa44466' : '#2aa444'}
             shadow={disabled ? 'transparent' : 'teal'}
             disabled={disabled}
-            onPress={() => signUp()}
+            onPress={() => handleSignUp()}
           >
             {load ?  
               <ActivityIndicator size="small" color="#fff" />
