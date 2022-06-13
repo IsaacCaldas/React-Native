@@ -27,6 +27,11 @@ export default function NewRegister() {
 
   async function newCashRegister() {
     Keyboard.dismiss()
+
+    if (type == 0) {
+      alert('Choose a valid type')
+      return
+    }
     
     if(isNaN(parseFloat(value)) || type === null) {
       alert('Fill in all fields.')

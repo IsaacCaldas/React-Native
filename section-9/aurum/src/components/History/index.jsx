@@ -4,7 +4,7 @@ import { Row, CashComing, CashText } from '../../styles/styleds'
 
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-export default function History({data, deleteMode}) {
+export default function History({data, deleteMode, deleteItem}) {
 
   const [value_formatted, setValue] = useState()
 
@@ -29,7 +29,7 @@ export default function History({data, deleteMode}) {
             name="closecircle"
             size={16}
             color="#eee"
-            onPress={() => console.log('1')}
+            onPress={() => deleteItem(data)}
           />
         </View>
       )
@@ -44,7 +44,7 @@ export default function History({data, deleteMode}) {
             name="closecircle"
             size={16}
             color="#eee"
-            onPress={() => console.log('1')}
+            onPress={() => deleteItem(data)}
           />
         </View>
       )

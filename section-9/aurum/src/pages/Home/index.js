@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { Content, Section, Title, CashHistory } from '../../styles/styleds'
 
 import { format } from 'date-fns'
@@ -49,6 +49,16 @@ export default function Home() {
         })
       })
   }
+
+  async function handleDelete(data) {
+    await firebase.database().ref('user_cash_history')
+      .child(uid).child(data.key).remove()
+  }
+
+  async function handleDeleteAll() {
+    await firebase.database().ref('user_cash_history')
+      .child(uid).remove()
+  }
   
   return (
     <Content>
@@ -64,15 +74,18 @@ export default function Home() {
         </TouchableOpacity>
         <CashHistory>
           { deleteMode && 
-            <View style={styles.delete}>
+            <TouchableOpacity 
+              style={styles.delete}
+              onPress={() => handleDeleteAll()}  
+            >
               <Text style={styles.deleteText}>Delete all</Text>
-            </View>
+            </TouchableOpacity>
           }
           <FlatList 
             keyExtractor={(item) => item.key}
             showsHorizontalScrollIndicator={false}
             data={cash_history}
-            renderItem={({item}) => <History data={item} deleteMode={deleteMode}/>}
+            renderItem={({item}) => <History data={item} deleteMode={deleteMode} deleteItem={handleDelete} />}
           />
         </CashHistory>
       </Section>
