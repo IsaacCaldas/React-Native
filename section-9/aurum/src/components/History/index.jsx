@@ -1,9 +1,25 @@
+import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Row, CashComing, CashText } from '../../styles/styleds'
 
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export default function History({data, deleteMode}) {
+
+  const [value_formatted, setValue] = useState()
+
+  useEffect(()=>{
+    formatValue()
+  },[])
+
+  function formatValue(){
+    let balance_format = (data.value / 100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    let index = balance_format.lastIndexOf('.')
+    if (index >= 0) {
+      balance_format = balance_format.substring(0, index) + ',' + balance_format.substring(index + 1)
+    }
+    setValue(balance_format)
+  }
 
   function leftDeleteButton() {
     if (data.type == 1) {
@@ -46,19 +62,19 @@ export default function History({data, deleteMode}) {
       >
         {data.type == 1 ?
           <>
-            <Text style={styles.historyText}>12/06/22</Text>
+            <Text style={styles.historyText}>{data.date}</Text>
             <View>
-              <CashText>R$ 10,00</CashText>
+              <CashText>R$ {value_formatted}</CashText>
               <Text style={styles.historyText}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
             </View>
           </>
           :
           <>
             <View>
-              <CashText>R$ 10,00</CashText>
+              <CashText>R$ {value_formatted}</CashText>
               <Text style={styles.historyText}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
             </View>
-            <Text style={styles.historyText}>11/06/22</Text>
+            <Text style={styles.historyText}>{data.date}</Text>
           </>
         }
       </CashComing>
