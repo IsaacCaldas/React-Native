@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { View, Animated, Keyboard } from 'react-native'
 import { Input } from '../../styles/styleds'
 import { magicSideParallel } from '../../utils/animations'
@@ -10,8 +10,6 @@ export default function InputArea({
   placeHolder
 }){
 
-  const [focus, setFocus] = useState(false)
-
   const top = useRef(new Animated.Value(0)).current
   const topValue = top.interpolate({
     inputRange: [0, 1],
@@ -20,7 +18,7 @@ export default function InputArea({
   const left = useRef(new Animated.Value(0)).current
   const leftValue = left.interpolate({
     inputRange: [0, 1],
-    outputRange: ['10px', '5px']
+    outputRange: ['15px', '5px']
   })
   // const right = useRef(new Animated.Value(0)).current
   // const rightValue = right.interpolate({
@@ -36,18 +34,18 @@ export default function InputArea({
   useEffect(() => {
     let top_side = {
       prop: top,
-      value: value || focus ? 1 : 0,
+      value: value ? 1 : 0,
       duration: 100
     }
     let left_side = {
       prop: left, 
-      value: value || focus ? 1 : 0,
+      value: value ? 1 : 0,
       duration: 100
     }
 
     magicSideParallel(top_side, left_side)
 
-  }, [value, focus]) 
+  }, [value]) 
 
   return (
     <View>
@@ -55,21 +53,17 @@ export default function InputArea({
         style={{
           position: 'relative',
           top: topValue, left: leftValue, 
-          fontSize: focus || value ? 13 : 16,
-          color: focus || value ? "#fff" : "#aaa"
+          fontSize: value ? 13 : 16,
+          color: value ? "#fff" : "#ccc"
       }}>
-        {value || focus ? placeHolder.entered : placeHolder.empty }
+        {value ? placeHolder.entered : placeHolder.empty }
       </Animated.Text>
       <Input 
         autoCorrect={false}
         autoCapitalize="none"
         value={value}
         secureTextEntry={password}
-        onFocus={() => setFocus(!focus)}
-        onBlur={() => {
-          setFocus(!focus)
-          Keyboard.dismiss()
-        }}
+        onBlur={() => Keyboard.dismiss()}
         onChangeText={(text) => setValue(text)}
       />
     </View>

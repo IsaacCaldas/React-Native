@@ -1,34 +1,53 @@
-import { useContext, useState } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import { useState, useEffect, useContext } from 'react'
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native'
+
+import { Content, Section, Title, CashHistory, Incoming, Outcoming } from '../../styles/styleds'
+
+import Header from '../../components/Header'
 
 import { AuthContext } from '../../contexts/auth'
-import { Container } from '../../styles/styleds'
 
-export default function Home() {
+export default function NewRegister() {
 
-  const { user, signOut } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
+
+  const [disabled, setDisabled] = useState(true)
+  const [load, setLoad] = useState()
+  const [value, setValue] = useState()
+  const [type, setType] = useState()
+
+  useEffect(() => {
+    value && type ? setDisabled(false) : setDisabled(true)
+  }, [value, type])
+
+  function newCashRegister() {
+    console.log(type)
+  }
 
   return (
-    <Container>
-      <Text style={styles.text}>Home</Text>
-      <Text style={styles.text}>Hello {user.name}</Text>
-      <Text style={styles.text}>Your balance {user.balance || 0}</Text>
-      <Text style={styles.text}>Logout 
-        <AntDesign
-          name="logout"
-          size={18}
-          color="#a33333"
-          onPress={() => signOut()}
-        />
-      </Text>
-    </Container>
+    <Content>
+      <Header/>
+      <Section>
+        <View>
+          <Text style={styles.name}>{user.name} balance</Text>
+          <Title>R$ {user.balance || '0,00'}</Title>
+        </View>
+        <CashHistory>
+          <Outcoming>
+            <Text>10,00</Text>
+          </Outcoming>
+          <Incoming>
+            <Text>R$ 15,50</Text>
+          </Incoming>
+        </CashHistory>
+      </Section>
+    </Content>
   )
 }
 
 const styles = StyleSheet.create({
-  text: {
-    color: '#eee',
-    fontSize: 16
+  name: {
+    fontSize: 18,
+    color: '#ddd'
   }
-})
+})  
