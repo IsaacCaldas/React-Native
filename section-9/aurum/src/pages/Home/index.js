@@ -53,11 +53,23 @@ export default function Home() {
   async function handleDelete(data) {
     await firebase.database().ref('user_cash_history')
       .child(uid).child(data.key).remove()
+
+
+    let user = firebase.database().ref('users').child(uid)
+    
+    await user.once('value').then((snapshot) => {
+      let balance = parseInt(snapshot.val().balance)
+      data.type == '1' ? balance -= data.value : balance += data.value
+
+      user.child('balance').set(balance)
+    })
   }
 
   async function handleDeleteAll() {
     await firebase.database().ref('user_cash_history')
       .child(uid).remove()
+
+    await firebase.database().ref('users').child(uid).child('balance').set(0)
   }
   
   return (

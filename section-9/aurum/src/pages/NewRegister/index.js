@@ -19,7 +19,7 @@ export default function NewRegister() {
   const [disabled, setDisabled] = useState(true)
   const [load, setLoad] = useState()
   const [value, setValue] = useState()
-  const [type, setType] = useState()
+  const [type, setType] = useState(1)
 
   useEffect(() => {
     value && type ? setDisabled(false) : setDisabled(true)
@@ -27,11 +27,6 @@ export default function NewRegister() {
 
   async function newCashRegister() {
     Keyboard.dismiss()
-
-    if (type == 0) {
-      alert('Choose a valid type')
-      return
-    }
     
     if(isNaN(parseFloat(value)) || type === null) {
       alert('Fill in all fields.')
@@ -80,7 +75,6 @@ export default function NewRegister() {
             selectedValue={type}
             onValueChange={(itemValue, itemIndex) => setType(itemValue)}
           >
-            <Picker.Item key={0} value={0} label='Type'/>
             <Picker.Item key={1} value={1} label='Incoming'/>
             <Picker.Item key={2} value={2} label='Outcoming'/>
           </Select>
