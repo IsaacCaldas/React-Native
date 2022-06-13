@@ -70,7 +70,6 @@ export default function AuthProvider({ children }) {
               email: value.user.email
             }
             setUser(data)
-            
             checked && toStore(data)
 
           }).catch((error) => {
@@ -108,7 +107,10 @@ export default function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, load, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={
+      { signed: !!user, user, load, 
+        signIn, signUp, signOut }
+    }>
       {children}
     </AuthContext.Provider>
   )

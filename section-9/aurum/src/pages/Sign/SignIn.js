@@ -20,7 +20,6 @@ export default function SignIn() {
   const [password, setPassword] = useState('')
   const [checked, setChecked] = useState(false)
 
-
   useEffect(() => {
     email && password ? setDisabled(false) : setDisabled(true)
   }, [email, password])

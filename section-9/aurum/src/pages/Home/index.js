@@ -60,9 +60,14 @@ export default function Home() {
         </View>
         <TouchableOpacity style={styles.btnEdit} onPress={() => setDeleteMode(!deleteMode)}>
           <Text style={styles.cashHistoryText}>Cash History</Text>
-          <Text style={styles.edit}>{deleteMode ? 'Cancel' : 'Edit'}</Text>
+          {cash_history && <Text style={styles.edit}>{deleteMode ? 'Cancel' : 'Edit'}</Text>}
         </TouchableOpacity>
         <CashHistory>
+          { deleteMode && 
+            <View style={styles.delete}>
+              <Text style={styles.deleteText}>Delete all</Text>
+            </View>
+          }
           <FlatList 
             keyExtractor={(item) => item.key}
             showsHorizontalScrollIndicator={false}
@@ -97,5 +102,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: -10,
     fontWeight: 'bold'
+  },
+  delete: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 5
+  },
+  deleteText: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'red'
   }
 })  
