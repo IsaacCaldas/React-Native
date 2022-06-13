@@ -1,28 +1,25 @@
-import { useState, useEffect, useContext } from 'react'
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native'
+import { useState, useContext } from 'react'
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native'
 
-import { Content, Section, Title, CashHistory, Incoming, Outcoming } from '../../styles/styleds'
-
+import { Content, Section, Title, CashHistory } from '../../styles/styleds'
 import Header from '../../components/Header'
-
 import { AuthContext } from '../../contexts/auth'
+import History from '../../components/History'
 
-export default function NewRegister() {
+export default function Home() {
 
   const { user } = useContext(AuthContext)
 
-  const [disabled, setDisabled] = useState(true)
   const [load, setLoad] = useState()
-  const [value, setValue] = useState()
-  const [type, setType] = useState()
+  const [deleteMode, setDeleteMode] = useState(false)
 
-  useEffect(() => {
-    value && type ? setDisabled(false) : setDisabled(true)
-  }, [value, type])
-
-  function newCashRegister() {
-    console.log(type)
-  }
+  const cash_history = [
+    { id: 0, value: 10000, type: 1},
+    { id: 1, value: 14030, type: 1},
+    { id: 2, value: 100110, type: 2},
+    { id: 3, value: 2030001, type: 1},
+    { id: 4, value: 1000, type: 2},
+  ]
 
   return (
     <Content>
@@ -32,13 +29,16 @@ export default function NewRegister() {
           <Text style={styles.name}>{user.name} balance</Text>
           <Title>R$ {user.balance || '0,00'}</Title>
         </View>
+        <TouchableOpacity style={styles.btnEdit} onPress={() => setDeleteMode(!deleteMode)}>
+          <Text style={styles.edit}>{deleteMode ? 'Cancel' : 'Edit'}</Text>
+        </TouchableOpacity>
         <CashHistory>
-          <Outcoming>
-            <Text>10,00</Text>
-          </Outcoming>
-          <Incoming>
-            <Text>R$ 15,50</Text>
-          </Incoming>
+          <FlatList 
+            keyExtractor={(item) => item.id}
+            showsHorizontalScrollIndicator={false}
+            data={cash_history}
+            renderItem={({item}) => <History data={item} deleteMode={deleteMode}/>}
+          />
         </CashHistory>
       </Section>
     </Content>
@@ -49,5 +49,16 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     color: '#ddd'
+  },
+  btnEdit: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  edit: {
+    fontSize: 16,
+    color: '#ddd',
+    marginRight: 10,
+    marginBottom: -10
   }
 })  

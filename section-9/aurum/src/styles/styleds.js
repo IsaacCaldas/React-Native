@@ -6,11 +6,15 @@ const Container = styled.SafeAreaView`
   justify-content: center;
   background-color: #161616;
 `
+const Row = styled.View`
+  flex-direction: row;
+  justify-content: flex-${props => props.end && 'end'};
+`
 const Content = styled.SafeAreaView`
   flex: 1;
   background-color: #161616;
 `
-const Section = styled.SafeAreaView`
+const Section = styled.View`
   flex: 1;
   padding: 10px 20px 0px 20px;
   justify-content: ${props => props.centered && 'center'};
@@ -90,30 +94,35 @@ const Select = styled.Picker`
 `
 const CashHistory = styled.View`
   flex: 1;
-  background-color: #444;
-  padding: 10px;
+  background-color: #333;
+  padding: 10px 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   margin-top: 15px;
 `
-const Incoming = styled.View`
+const CashComing = styled.View`
+  background-color: ${props => props.bgColor};
   width: 65%;
-  height: 50px;
-  background-color: '#2aa444';
-  border-radius: 10px;
-  border-top-right-radius: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border-bottom-right-radius: ${props => props.borderRight}px;
+  border-top-left-radius: ${props => props.borderLeft}px;
+  margin-top: 15px;
+  border: 2px solid ${props => props.borderColor};
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
 `
-const Outcoming = styled.View`
-  width: 65%;
-  height: 50px;
-  background-color: '#8a251c';
-  border-radius: 10px;
-  border-bottom-left-radius: 20px;
+const CashText = styled.Text`
+  font-size: 16px;
+  color: #efe;
+  font-weight: bold;
 `
 
 export {
   Container, 
   Modal, 
+  Row,
   Logo, 
   Form,
   Input, 
@@ -124,7 +133,7 @@ export {
   Section,
   Title,
   Select,
-  CashHistory, 
-  Incoming, 
-  Outcoming
+  CashHistory,
+  CashComing,
+  CashText
 }
