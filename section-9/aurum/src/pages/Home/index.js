@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 
 import { Content, Section, Title, CashHistory } from '../../styles/styleds'
 import Header from '../../components/Header'
@@ -30,6 +30,7 @@ export default function Home() {
           <Title>R$ {user.balance || '0,00'}</Title>
         </View>
         <TouchableOpacity style={styles.btnEdit} onPress={() => setDeleteMode(!deleteMode)}>
+          <Text style={styles.cashHistoryText}>Cash History</Text>
           <Text style={styles.edit}>{deleteMode ? 'Cancel' : 'Edit'}</Text>
         </TouchableOpacity>
         <CashHistory>
@@ -53,12 +54,19 @@ const styles = StyleSheet.create({
   btnEdit: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  cashHistoryText: {
+    fontSize: 16,
+    color: '#2aa444',
+    marginLeft: 10,
+    marginBottom: -10
   },
   edit: {
     fontSize: 16,
     color: '#ddd',
     marginRight: 10,
-    marginBottom: -10
+    marginBottom: -10,
+    fontWeight: 'bold'
   }
 })  

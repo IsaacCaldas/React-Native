@@ -45,15 +45,21 @@ export default function History({data, deleteMode}) {
         bgColor={data.type == 1 ? '#2aa444' : '#8a251c'}
       >
         {data.type == 1 ?
-            <>
-              <Text style={styles.cash_coming}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
+          <>
+            <Text style={styles.historyText}>12/06/22</Text>
+            <View>
               <CashText>R$ 10,00</CashText>
-            </>
+              <Text style={styles.historyText}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
+            </View>
+          </>
           :
-            <>
+          <>
+            <View>
               <CashText>R$ 10,00</CashText>
-              <Text style={styles.cash_coming}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
-            </>
+              <Text style={styles.historyText}>{data.type == 1 ? 'Incoming' : 'Outcoming'}</Text>
+            </View>
+            <Text style={styles.historyText}>11/06/22</Text>
+          </>
         }
       </CashComing>
       { deleteMode && rightDeleteButton() }
@@ -62,7 +68,7 @@ export default function History({data, deleteMode}) {
 }
 
 const styles = StyleSheet.create({
-  cash_coming: {
+  historyText: {
     fontSize: 14,
     color: '#ddd'
   }
