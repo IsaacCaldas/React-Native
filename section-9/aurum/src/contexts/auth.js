@@ -57,7 +57,7 @@ export default function AuthProvider({ children }) {
       })
   }
 
-  async function signIn(email, password) {
+  async function signIn(email, password, checked) {
     await firebase.auth().signInWithEmailAndPassword(email, password)
       .then(async (value) => {
         let uid = value.user.uid
@@ -70,7 +70,8 @@ export default function AuthProvider({ children }) {
               email: value.user.email
             }
             setUser(data)
-            toStore(data)
+            
+            checked && toStore(data)
 
           }).catch((error) => {
             alert('Internal server error, try again.')
@@ -87,11 +88,10 @@ export default function AuthProvider({ children }) {
 
   async function signOut() {
     await firebase.auth().signOut()
+    await AsyncStorage.clear()
       .then(() => {
-        navigation.navigate('SignUp')
-      }).catch((error) => {
-        alert('Internal server error', error.code)
-      });
+        setUser(null)
+      })
   }
 
   async function toStore(data) {

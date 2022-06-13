@@ -29,7 +29,7 @@ export default function SignIn() {
     setLoad(true)
     setEmail('')
     setPassword('')
-    signIn(email, password)
+    signIn(email, password, checked)
     !signed && setLoad(false)
   }
 

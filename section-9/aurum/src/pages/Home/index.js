@@ -9,21 +9,26 @@ export default function Home() {
 
   const { user, signOut } = useContext(AuthContext)
 
-
   return (
     <Container>
-      <Text>Home</Text>
-      <Text>Hello {user.name}</Text>
-      <Text>Your balance {user.balance}</Text>
-      <Text>Logout 
+      <Text style={styles.text}>Home</Text>
+      <Text style={styles.text}>Hello {user.name}</Text>
+      <Text style={styles.text}>Your balance {user.balance || 0}</Text>
+      <Text style={styles.text}>Logout 
         <AntDesign
           name="logout"
           size={18}
-          color="#222"
+          color="#a33333"
           onPress={() => signOut()}
         />
       </Text>
     </Container>
   )
-
 }
+
+const styles = StyleSheet.create({
+  text: {
+    color: '#eee',
+    fontSize: 16
+  }
+})
