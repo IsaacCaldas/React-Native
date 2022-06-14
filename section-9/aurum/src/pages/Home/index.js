@@ -68,7 +68,6 @@ export default function Home() {
         alert('Internal error server')
         return
       })
-
   }
 
   async function handleDeleteAll() {
