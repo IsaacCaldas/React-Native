@@ -49,7 +49,6 @@ export default function App() {
               coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
               title={'Marker Title'}
               description={'Marker Description'}
-              image={require('./src/assets/carro.png')}
             />))
         }
       </MapView>
